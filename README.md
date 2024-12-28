@@ -62,19 +62,6 @@ Este proyecto implementa un modelo de Random Survival Forest utilizando R. El ob
     source("scripts/preprocess_data.R")
     ```
 
-## Contribuciones
-
-Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request para discutir cualquier cambio.
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
-
-## Contacto
-
-Para cualquier consulta, puedes escribirme: eduardobareapoot@outlook.com
-royecto de Machine Learning: Random Survival Forest
-
 ## Descripción
 
 Este proyecto implementa un modelo de Random Survival Forest utilizando R. El objetivo es predecir la supervivencia de individuos basándose en diversas características. El proyecto está estructurado de manera modular para facilitar su comprensión y mantenimiento.
