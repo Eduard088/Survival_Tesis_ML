@@ -1,0 +1,23 @@
+# conda env create --file environment.yml
+name: Survuver_slug
+channels:
+  - anaconda
+  - conda-forge
+  - defaults
+dependencies:
+  - jupyterlab
+  - python=3.9
+  - nodejs
+  - matplotlib
+  - numpy
+  - conda-forge::scikit-learn
+  - pandas
+  - seaborn
+  - nbdime
+  - git
+  - conda-forge::cookiecutter
+  - conda-forge::kagglehub
+  - ipywidgets
+  - openpyxl
+  - conda-forge::imbalanced-learn
+  prefix: /home/barea/anaconda3/envs/Survuver_slug

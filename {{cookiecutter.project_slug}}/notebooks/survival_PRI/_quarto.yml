@@ -1,0 +1,39 @@
+project:
+  type: book
+  output-dir: docs 
+
+book:
+  title: "Modelo de Supervivencia: La Muerte del PRI"
+  author: "Eduardo Barea"
+  date: "12/27/2024"
+  chapters:
+    - index.qmd
+    - survival_model_PRI.qmd
+
+bibliography: references.bib
+
+sidebar:
+  style: docked
+  background: dark
+
+format:
+  html:
+    theme:
+      light: [flatly, theme-light.scss]
+      dark: [darkly, theme-dark.scss]
+    code-fold: true
+    code-summary: "Mostrar el Código"
+
+comments:
+  hypothesis: true
+
+highlight-style: vim-dark
+
+website:
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Home"
+        href: index.qmd
+

@@ -1,0 +1,10 @@
+---
+title: "Random Survival Forest (RSF)"
+css: custom.css
+
+execute:
+  enabled: true
+  kernel: R
+---
+# Presentación {.fade-in}
+En este en este documento se describe el proceso de creación y análisis de un modelo de supervivencia aleatorio Random Survival Forest ('RSF') aplicado a datos electorales del Partido Revolucionario Institucional (PRI). El objetivo es predecir la duración de eventos políticos en función de diversas variables explicativas.

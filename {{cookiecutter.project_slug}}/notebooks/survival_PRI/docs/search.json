@@ -1,0 +1,82 @@
+[
+  {
+    "objectID": "survival_model_PRI.html",
+    "href": "survival_model_PRI.html",
+    "title": "2  Análisis de Supervivencia del Priismo en la Partitocracia Mexicana",
+    "section": "",
+    "text": "2.1 Instalar los Paquetes:\nMostrar el Código\n# devtools::install(\"/home/barea/Rstudio_tesis/models\")\n# sustituir esto por tu ruta actual, por ejemplo: devtools::install(\"/home/user/models\").}\n# Para instalar las dependencias en tu entorno.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Análisis de Supervivencia del Priismo en la Partitocracia Mexicana</span>"
+    ]
+  },
+  {
+    "objectID": "survival_model_PRI.html#cargar-las-librerías",
+    "href": "survival_model_PRI.html#cargar-las-librerías",
+    "title": "2  Análisis de Supervivencia del Priismo en la Partitocracia Mexicana",
+    "section": "2.3 Cargar las Librerías:",
+    "text": "2.3 Cargar las Librerías:\nCargamos las librerías necesarias para el análisis. En este caso, utilizamos un script externo que contiene todas las funciones y paquetes requeridos.\n\n\nMostrar el Código\nsource('/home/barea/Survival/model/R/script.R')\n\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n\n\n\nAttaching package: 'plotly'\n\n\nThe following object is masked from 'package:ggplot2':\n\n    last_plot\n\n\nThe following object is masked from 'package:stats':\n\n    filter\n\n\nThe following object is masked from 'package:graphics':\n\n    layout\n\n\n\n randomForestSRC 3.3.1 \n \n Type rfsrc.news() to see new features, changes, and bug fixes.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Análisis de Supervivencia del Priismo en la Partitocracia Mexicana</span>"
+    ]
+  },
+  {
+    "objectID": "survival_model_PRI.html#cargar-los-datos",
+    "href": "survival_model_PRI.html#cargar-los-datos",
+    "title": "2  Análisis de Supervivencia del Priismo en la Partitocracia Mexicana",
+    "section": "2.4 Cargar los Datos:",
+    "text": "2.4 Cargar los Datos:\nLeemos los datos electorales desde un archivo Excel y los mostramos en una tabla interactiva.\n\n\nMostrar el Código\nElecciones_PRI &lt;- read_excel('/home/barea/surviver_model/survival/{{cookiecutter.project_slug}}/data/Elecciones_PRI.xlsx')\n\nreactable(Elecciones_PRI)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Análisis de Supervivencia del Priismo en la Partitocracia Mexicana</span>"
+    ]
+  },
+  {
+    "objectID": "survival_model_PRI.html#crear-de-la-fórmula-de-supervivencia",
+    "href": "survival_model_PRI.html#crear-de-la-fórmula-de-supervivencia",
+    "title": "2  Análisis de Supervivencia del Priismo en la Partitocracia Mexicana",
+    "section": "2.5 Crear de la Fórmula de Supervivencia:",
+    "text": "2.5 Crear de la Fórmula de Supervivencia:\nDefinimos la fórmula de supervivencia que especifica la relación entre el tiempo hasta el evento (supervivencia) y las variables explicativas.\n\n\nMostrar el Código\nformula_surv &lt;- Surv(Tiempo, Evento) ~ PARTICIPACION + Monto + Votos\n\n\n\n2.5.1 Crear el Modelo de Supervivencia:\nUtilizamos la fórmula de supervivencia y los datos cargados para crear un modelo de supervivencia aleatorio. Este modelo se entrena con un número específico de árboles y un tamaño mínimo de nodos.\n\n\nMostrar el Código\nmodelo_rsf &lt;- crear_modelo_rsf(formula_surv, Elecciones_PRI, ntree = 1255, nodesize = 9.30)\n\n\n\n\n2.5.2 Resumen del Modelo de Suvervivencia:\nImprimimos un resumen del modelo de supervivencia para evaluar su estructura y parámetros.\n\n\nMostrar el Código\nprint(modelo_rsf)\n\n\n                         Sample size: 87\n                    Number of deaths: 56\n                     Number of trees: 1255\n           Forest terminal node size: 9\n       Average no. of terminal nodes: 9.6908\nNo. of variables tried at each split: 2\n              Total no. of variables: 3\n       Resampling used to grow trees: swor\n    Resample size used to grow trees: 55\n                            Analysis: RSF\n                              Family: surv\n                      Splitting rule: logrank *random*\n       Number of random split points: 10\n                          (OOB) CRPS: 0.18493401\n                   (OOB) stand. CRPS: 0.02641914\n   (OOB) Requested performance error: 0.23636364\n\n\n\n\n2.5.3 Resumen de los ‘Importancies’ del Modelo de Supervivencia:\nEvaluamos la importancia de cada variable en el modelo de supervivencia y mostramos los resultados.\n\n\nMostrar el Código\nprint(modelo_rsf$importance)\n\n\nPARTICIPACION         Monto         Votos \n    0.3453414     0.3126929     0.2101680 \n\n\n\n\n2.5.4 Extracción de los Datos de Supervivencia:\nExtraemos los datos de supervivencia generados por el modelo para un análisis más detallado.\n\n\nMostrar el Código\nsurvival_df &lt;- crear_survival_df(modelo_rsf)\nprint(survival_df)\n\n\n  time        X1         X2         X3         X4        X5        X6\n1    3 0.1697168 0.08389092 0.09932858 0.03498259 0.2882988 0.1482547\n2    4 0.1683234 0.08369708 0.09911166 0.03498259 0.2844873 0.1463126\n3    5 0.1683234 0.08369708 0.09911166 0.03462184 0.2828434 0.1449212\n4    6 0.1521423 0.05117271 0.06941432 0.01731602 0.2717622 0.1309524\n5    7 0.1459695 0.05117271 0.06941432 0.01731602 0.2717622 0.1277056\n          X7         X8        X9        X10        X11        X12         X13\n1 0.06345263 0.14184665 0.7415449 0.06412893 0.10060606 0.04037830 0.021374827\n2 0.06345263 0.14101849 0.7406748 0.06412893 0.09962466 0.04037830 0.021374827\n3 0.06079069 0.13933277 0.7342735 0.06217581 0.09962466 0.04008314 0.021374827\n4 0.04968944 0.11829710 0.5194353 0.05431548 0.08181818 0.01153581 0.009826153\n5 0.04761905 0.09782609 0.4512712 0.05133929 0.08181818 0.00000000 0.009070295\n          X14        X15        X16       X17       X18       X19        X20\n1 0.013024995 0.09186900 0.05495374 0.6336167 0.2502273 0.5815994 0.94696062\n2 0.013024995 0.09140316 0.05495374 0.6334781 0.2499026 0.5458887 0.88212883\n3 0.013024995 0.08919992 0.05495374 0.6323780 0.2499026 0.5262890 0.85114313\n4 0.003347428 0.07300725 0.03773247 0.4792067 0.2308712 0.4558015 0.02278295\n5 0.002114165 0.07173913 0.03218884 0.4677755 0.2204545 0.4543478 0.00000000\n        X21       X22       X23       X24        X25       X26         X27\n1 0.1931581 0.1619876 0.1833526 0.1789985 0.98537901 0.1830543 0.564525221\n2 0.1931581 0.1619876 0.1833526 0.1786536 0.95915929 0.1830543 0.558676806\n3 0.1920536 0.1619876 0.1809934 0.1786536 0.94484465 0.1822520 0.556090728\n4 0.1816971 0.1490719 0.1740868 0.1726457 0.03576122 0.1670290 0.021729536\n5 0.1803653 0.1484919 0.1735160 0.1726457 0.00000000 0.1608696 0.004415011\n        X28       X29        X30        X31       X32        X33       X34\n1 0.5507924 0.5623765 0.05387349 0.08596469 0.1838532 0.91255827 0.1364461\n2 0.5507924 0.5621006 0.05387349 0.08575765 0.1831101 0.84694121 0.1364461\n3 0.5486542 0.5618154 0.05316276 0.08575765 0.1831101 0.82681483 0.1364461\n4 0.4481692 0.4717553 0.03837953 0.06004141 0.1616379 0.02367241 0.1122244\n5 0.4129464 0.4701987 0.03411514 0.06004141 0.1616379 0.00000000 0.1122244\n        X35        X36        X37        X38        X39       X40        X41\n1 0.2982901 0.01497374 0.08996842 0.02060344 0.09302029 0.1241750 0.01498031\n2 0.2978655 0.01497374 0.08958725 0.02060344 0.09230152 0.1237102 0.01498031\n3 0.2978655 0.01462360 0.08939666 0.02060344 0.09230152 0.1224844 0.01460323\n4 0.2590234 0.00000000 0.07337526 0.00431332 0.07173448 0.1041215 0.00000000\n5 0.2590234 0.00000000 0.07337526 0.00000000 0.07066381 0.1041215 0.00000000\n         X42        X43         X44        X45         X46        X47\n1 0.01642416 0.11099959 0.026809923 0.04412805 0.719765786 0.09807806\n2 0.01642416 0.11099959 0.026809923 0.04412805 0.690631040 0.09807806\n3 0.01605130 0.10902065 0.026809923 0.04347642 0.676622240 0.09735991\n4 0.00000000 0.08968773 0.008743754 0.03052632 0.015773186 0.07946636\n5 0.00000000 0.08278867 0.000000000 0.02947368 0.001992032 0.07888631\n         X48         X49         X50         X51        X52       X53       X54\n1 0.01603701 0.018583871 0.025325524 0.029002459 0.01864849 0.2027900 0.1430922\n2 0.01603701 0.018583871 0.025325524 0.029002459 0.01864849 0.2000581 0.1430922\n3 0.01603701 0.018583871 0.025325524 0.029002459 0.01825908 0.1998145 0.1430922\n4 0.00000000 0.002906977 0.004618938 0.006818182 0.00000000 0.1798246 0.1141649\n5 0.00000000 0.000000000 0.004618938 0.006818182 0.00000000 0.1798246 0.1141649\n          X55         X56         X57         X58         X59         X60\n1 0.487063893 0.024502256 0.024888544 0.036768357 0.949976749 0.939729595\n2 0.433646993 0.024502256 0.024888544 0.036768357 0.572966122 0.514873323\n3 0.422674095 0.024502256 0.024888544 0.036768357 0.445978229 0.404146070\n4 0.005174841 0.009179266 0.008528785 0.008264463 0.012038392 0.009671598\n5 0.000000000 0.008639309 0.008528785 0.008264463 0.002192982 0.002267574\n          X61        X62        X63       X64         X65        X66        X67\n1 0.963851992 0.97824607 0.91814271 0.8590883 0.725769731 0.95729079 0.80612874\n2 0.846372533 0.89917002 0.82750794 0.7226426 0.712097733 0.90437593 0.79662170\n3 0.675491688 0.89917002 0.79545331 0.6943926 0.708323767 0.89249505 0.79046554\n4 0.022014770 0.07450123 0.02247439 0.0181374 0.024330825 0.02882677 0.03160139\n5 0.002242152 0.00000000 0.00000000 0.0000000 0.004219409 0.00000000 0.00610998\n         X68        X69        X70        X71        X72       X73        X74\n1 0.98421602 0.98818776 0.98383224 0.91808204 0.97939725 0.9762224 0.98443816\n2 0.93918176 0.91826197 0.93262076 0.89910830 0.94734830 0.9546779 0.95631711\n3 0.92029630 0.88581639 0.90958647 0.88304334 0.92853058 0.9362666 0.94454090\n4 0.03428671 0.02770247 0.03102937 0.05717843 0.03787046 0.2029599 0.03325336\n5 0.00000000 0.00000000 0.00000000 0.00422833 0.00000000 0.0000000 0.00000000\n         X75        X76       X77        X78        X79         X80       X81\n1 0.92784043 0.90895149 0.9766500 0.92010809 0.98605685 0.807269915 0.9249539\n2 0.84089923 0.81068634 0.9549554 0.84112934 0.95566998 0.739267636 0.8366206\n3 0.81281635 0.77888646 0.9389808 0.80406616 0.94326173 0.715231145 0.8008536\n4 0.02053217 0.02002896 0.1409347 0.05073307 0.02861944 0.021085864 0.0217558\n5 0.00000000 0.00000000 0.0000000 0.00000000 0.00000000 0.002283105 0.0000000\n        X82        X83         X84         X85        X86         X87\n1 0.9791346 0.97962628 0.449293248 0.641774345 0.97827514 0.939310501\n2 0.9482080 0.95278674 0.438017664 0.635854341 0.95539538 0.922311249\n3 0.9376839 0.94176053 0.436229949 0.633101025 0.94452499 0.898537147\n4 0.0318257 0.03536634 0.014885602 0.028874052 0.04733032 0.002192982\n5 0.0000000 0.00000000 0.002217295 0.006437768 0.00000000 0.002192982\n\n\n\n\n2.5.5 Crear el Tibble de Supervivencia:\nConvertimos los datos de supervivencia en un formato largo (long format) para facilitar la visualización y el análisis.\n\n\nMostrar el Código\nsurvival_long &lt;- crear_survival_long(survival_df)\nreactable(survival_long)\n\n\n\n\n\n\n\n\n2.5.6 Tibble de los ‘Impotances’:\nCreamos un tibble que contiene la importancia de cada variable en el modelo de supervivencia.\n\n\nMostrar el Código\nimportancia &lt;- crear_importancia_df(modelo_rsf)\nreactable(importancia)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Análisis de Supervivencia del Priismo en la Partitocracia Mexicana</span>"
+    ]
+  },
+  {
+    "objectID": "survival_model_PRI.html#visualización-de-las-curvas-de-supervivencia-del-modelo",
+    "href": "survival_model_PRI.html#visualización-de-las-curvas-de-supervivencia-del-modelo",
+    "title": "2  Análisis de Supervivencia del Priismo en la Partitocracia Mexicana",
+    "section": "2.6 Visualización de las Curvas de Supervivencia del Modelo:",
+    "text": "2.6 Visualización de las Curvas de Supervivencia del Modelo:\nGeneramos gráficos para visualizar los resultados del modelo de supervivencia. {.show-on-hover}\n\n\nMostrar el Código\ncrear_grafico_supervivencia(survival_long)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Análisis de Supervivencia del Priismo en la Partitocracia Mexicana</span>"
+    ]
+  },
+  {
+    "objectID": "survival_model_PRI.html#visualización-de-los-importances",
+    "href": "survival_model_PRI.html#visualización-de-los-importances",
+    "title": "2  Análisis de Supervivencia del Priismo en la Partitocracia Mexicana",
+    "section": "2.7 Visualización de los ‘Importances’:",
+    "text": "2.7 Visualización de los ‘Importances’:\nFinalmente, visualizamos la importancia de las variables en el modelo de supervivencia.\n\n\nMostrar el Código\ncrear_grafico_importancia(importancia)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Análisis de Supervivencia del Priismo en la Partitocracia Mexicana</span>"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Modelo de Supervivencia: La Muerte del PRI",
+    "section": "",
+    "text": "1 Presentación\nEn este en este documento se describe el proceso de creación y análisis de un modelo de supervivencia aleatorio Random Survival Forest (‘RSF’) aplicado a datos electorales del Partido Revolucionario Institucional (PRI). El objetivo es predecir la duración de eventos políticos en función de diversas variables explicativas.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Random Survival Forest (RSF)</span>"
+    ]
+  },
+  {
+    "objectID": "survival_model_PRI.html#configuración-inicial",
+    "href": "survival_model_PRI.html#configuración-inicial",
+    "title": "2  Análisis de Supervivencia del Priismo en la Partitocracia Mexicana",
+    "section": "2.2 Configuración Inicial:",
+    "text": "2.2 Configuración Inicial:\nPrimero, configuramos el entorno de trabajo para que los fragmentos de código se ejecuten correctamente y se muestren los resultados.\nEste documento describe el proceso de creación y análisis de un modelo de supervivencia aleatorio (Random Survival Model) aplicado a datos electorales del Partido Revolucionario Institucional (PRI). El objetivo es predecir la duración de eventos políticos en función de diversas variables explicativas.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Análisis de Supervivencia del Priismo en la Partitocracia Mexicana</span>"
+    ]
+  }
+]

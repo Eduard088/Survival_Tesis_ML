@@ -1,0 +1,95 @@
+---
+title: "Análisis de Supervivencia del Priismo en la Partitocracia Mexicana"
+css: custom.css
+
+execute:
+  enabled: true
+  kernel: R
+---
+
+## Instalar los Paquetes: {.show-on-hover}
+```{r}
+# devtools::install("/home/barea/Rstudio_tesis/models")
+# sustituir esto por tu ruta actual, por ejemplo: devtools::install("/home/user/models").}
+# Para instalar las dependencias en tu entorno.
+```
+## Configuración Inicial: {.fade-in}
+Primero, configuramos el entorno de trabajo para que los fragmentos de código se ejecuten correctamente y se muestren los resultados.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Este documento describe el proceso de creación y análisis de un modelo de supervivencia aleatorio (Random Survival Model) aplicado a datos electorales del Partido Revolucionario Institucional (PRI). El objetivo es predecir la duración de eventos políticos en función de diversas variables explicativas.
+
+## Cargar las Librerías: {.fade-in}
+Cargamos las librerías necesarias para el análisis. En este caso, utilizamos un script externo que contiene todas las funciones y paquetes requeridos.
+
+```{r}
+source('/home/barea/Survival/model/R/script.R')
+```
+
+## Cargar los Datos: {.fade-in}
+Leemos los datos electorales desde un archivo Excel y los mostramos en una tabla interactiva. 
+```{r}
+Elecciones_PRI <- read_excel('/home/barea/surviver_model/survival/{{cookiecutter.project_slug}}/data/Elecciones_PRI.xlsx')
+
+reactable(Elecciones_PRI)
+```
+
+## Crear de la Fórmula de Supervivencia: {.fade-in}
+Definimos la fórmula de supervivencia que especifica la relación entre el tiempo hasta el evento (supervivencia) y las variables explicativas.
+```{r}
+formula_surv <- Surv(Tiempo, Evento) ~ PARTICIPACION + Monto + Votos
+```
+
+### Crear el Modelo de Supervivencia: {.fade-in}
+Utilizamos la fórmula de supervivencia y los datos cargados para crear un modelo de supervivencia aleatorio. Este modelo se entrena con un número específico de árboles y un tamaño mínimo de nodos.
+```{r}
+modelo_rsf <- crear_modelo_rsf(formula_surv, Elecciones_PRI, ntree = 1255, nodesize = 9.30)
+```
+
+### Resumen del Modelo de Suvervivencia: {.fade-in}
+Imprimimos un resumen del modelo de supervivencia para evaluar su estructura y parámetros.
+```{r}
+print(modelo_rsf)
+```
+
+### Resumen de los 'Importancies' del Modelo de Supervivencia: {.fade-in}
+Evaluamos la importancia de cada variable en el modelo de supervivencia y mostramos los resultados.
+```{r}
+print(modelo_rsf$importance)
+```
+
+### Extracción de los Datos de Supervivencia: {.fade-in}
+Extraemos los datos de supervivencia generados por el modelo para un análisis más detallado.
+```{r}
+survival_df <- crear_survival_df(modelo_rsf)
+print(survival_df)
+``` 
+
+### Crear el Tibble de Supervivencia: {.fade-in}
+Convertimos los datos de supervivencia en un formato largo (long format) para facilitar la visualización y el análisis.
+```{r}
+survival_long <- crear_survival_long(survival_df)
+reactable(survival_long)
+```
+
+### Tibble de los 'Impotances': {.fade-in}
+Creamos un tibble que contiene la importancia de cada variable en el modelo de supervivencia.
+```{r}
+importancia <- crear_importancia_df(modelo_rsf)
+reactable(importancia)
+```
+
+## Visualización de las Curvas de Supervivencia del Modelo: {.fade-in}
+Generamos gráficos para visualizar los resultados del modelo de supervivencia. {.show-on-hover}
+```{r}
+crear_grafico_supervivencia(survival_long)
+```
+
+## Visualización de los 'Importances': {.fade-in}
+Finalmente, visualizamos la importancia de las variables en el modelo de supervivencia.
+```{r}
+crear_grafico_importancia(importancia)
+```
+
