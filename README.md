@@ -51,7 +51,7 @@ Este proyecto implementa un modelo de Random Survival Forest utilizando R. El ob
     ```
 2. Instala los paquetes necesarios en R:
     ```R
-    devtools::install("/home/barea/Rstudio_tesis/models")
+    devtools::install("/home/user/models")
     ```
 
 ## Uso
