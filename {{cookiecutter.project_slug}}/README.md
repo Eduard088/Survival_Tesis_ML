@@ -46,4 +46,4 @@ Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para má
 
 ## Contacto
 
-Para cualquier consulta, puedes escribirme: eduardobareapootq@outlook.com
+Para cualquier consulta, puedes escribirme: eduardobareapoot@outlook.com
